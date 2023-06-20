@@ -5,6 +5,8 @@ O projeto está dividido em dois serviços principais:
 
 ```
 mysql_db: Serviço MySQL com um banco chamado "teste"
+```
+```
 nodeapp: Serviço NodeJS escutando a porta 3000.
 ```
 
