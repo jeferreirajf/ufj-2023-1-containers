@@ -1,0 +1,30 @@
+version: '3'
+
+networks:
+  docker_compose_network:
+    internal: false
+    # Cria a rede quando false, tenta conectar em 
+    # uma rede existente quando true
+    external: false
+
+services:
+  nginx:
+    image: nginx:latest
+    container_name: zezinho
+    tty: true
+    ports:
+      - 8000:80
+    networks:
+      - docker_compose_network
+
+  os:
+    image: ubuntu:latest
+    container_name: huguinho
+    tty: true
+    networks:
+      - docker_compose_network
+
+  os2:
+    image: ubuntu:latest
+    container_name: luizinho
+    tty: true

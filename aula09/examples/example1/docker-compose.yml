@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  nginx:
+    image: nginx:latest
+    container_name: zezinho
+    tty: true
+    ports:
+      - 8000:80
+    volumes:
+      - nginx_volume:/usr/share/nginx/html
+
+  os:
+    image: ubuntu:latest
+    container_name: huguinho
+    tty: true
+    volumes:
+      - nginx_volume:/home/app
+
+volumes:
+  nginx_volume:

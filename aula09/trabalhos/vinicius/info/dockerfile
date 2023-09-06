@@ -1,0 +1,11 @@
+FROM golang:latest 
+
+WORKDIR /topicos/app 
+
+COPY ./servidor.go ./ 
+
+RUN go build servidor.go 
+
+CMD ["./servidor"]
+
+

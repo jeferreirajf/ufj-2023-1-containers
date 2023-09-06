@@ -1,0 +1,26 @@
+version: '3'
+
+networks:
+  rede:
+    external: false
+    internal: true
+    
+services:
+  ubuntu:
+    container_name: ubuntu
+    build:
+      context: ./info/ubuntu  
+      dockerfile: dockerfile
+    tty: true
+    networks:
+      - rede
+  
+  goapp:
+    container_name: goapp
+    build: 
+      context: ./info 
+      dockerfile: dockerfile
+    networks:
+      - rede
+
+    

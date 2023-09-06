@@ -1,0 +1,9 @@
+version: '3'
+
+services:
+  os:
+    container_name: ubuntu
+    build:
+      context: ./ubuntu
+      dockerfile: Dockerfile
+    tty: true
