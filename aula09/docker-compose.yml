@@ -1,0 +1,60 @@
+version: '3'
+
+networks:
+  db_internal:
+    external: false
+    internal: true
+  nodeapp_external:
+    external: false
+    internal: false
+
+services:
+  # This is the MySQL DB service
+  db:
+    image: mysql:5.7
+    container_name: mysql_db
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=teste
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost" ]
+      interval: 5s
+      timeout: 10s
+      retries: 3
+    networks:
+      - db_internal
+
+  # This service is used to migrate Prisma tables
+  sql_migration:
+    build:
+      context: ./nodeapp
+      dockerfile: "@migration.dockerfile"
+    container_name: prisma_migration
+    environment:
+      - DATABASE_URL=mysql://root:root@mysql_db:3306/teste
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - db_internal
+      - nodeapp_external
+
+  # This is the main Node App service
+  nodeapp:
+    build: 
+      context: ./nodeapp
+      dockerfile: "@production.dockerfile"
+    container_name: nodeapp
+    depends_on:
+      sql_migration:
+        condition: service_started
+      db:
+        condition: service_healthy
+    ports:
+      - 3000:3000
+    environment:
+      - DATABASE_URL=mysql://root:root@mysql_db:3306/teste
+    networks:
+      - db_internal
+      - nodeapp_external
